@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math"
 	"os"
 	"slices"
 	"strconv"
@@ -10,11 +9,11 @@ import (
 	"sync"
 )
 
-func min(a, b int) int {
-	if a < b {
-		return a
+func abs(n int) int {
+	if n < 0 {
+		return -n
 	}
-	return b
+	return n
 }
 
 type LocationList struct {
@@ -55,15 +54,15 @@ func sortLocations(list LocationList) {
 	var wg sync.WaitGroup
 	wg.Add(2)
 
-	go func(left []int) {
+	go func() {
 		defer wg.Done()
-		slices.Sort(left)
-	}(list.left)
+		slices.Sort(list.left)
+	}()
 
-	go func(right []int) {
+	go func() {
 		defer wg.Done()
-		slices.Sort(right)
-	}(list.right)
+		slices.Sort(list.right)
+	}()
 
 	wg.Wait()
 }
@@ -71,7 +70,7 @@ func sortLocations(list LocationList) {
 func sumLocationDistances(list LocationList) int {
 	var sum int
 	for i := 0; i < len(list.left); i++ {
-		sum += int(math.Abs(float64(list.left[i] - list.right[i])))
+		sum += int(abs(list.left[i] - list.right[i]))
 	}
 	return sum
 }
